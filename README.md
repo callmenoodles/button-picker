@@ -69,5 +69,9 @@ class MyApp extends StatelessWidget {
 - `iconDownLeftColor` is the color of the lower button when `horizontal == false` and the color of the left button when `horizontal == true`.
 - `style` is the `TextStyle` of the value.
 
+![ButtonPicker](/res/button_picker.png)
+
+**Note:** When both `initialValue` and `step` are integers, the value won't have any decimals.
+
 # License
 [MIT](LICENSE)
