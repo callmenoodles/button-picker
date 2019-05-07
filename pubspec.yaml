@@ -1,0 +1,18 @@
+name: button_picker
+description: Customizable Flutter number picker using buttons instead of scroll.
+version: 0.1.0
+author: Alex Lushiku <alex.lushiku@outlook.com>
+homepage: http://alexlushiku.com
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
