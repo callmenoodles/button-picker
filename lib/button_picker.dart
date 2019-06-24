@@ -3,10 +3,7 @@ library button_picker;
 import 'package:flutter/material.dart';
 
 class ButtonPicker extends StatefulWidget {
-
   // FIXME: Horizontal ButtonPicker has variable width
-  // TODO: Write README and CHANGELOG
-  // TODO: Visual demonstration
   // TODO: Support for characters
   // TODO: Press and hold to count faster
 
@@ -28,21 +25,21 @@ class ButtonPicker extends StatefulWidget {
     this.iconRight = Icons.arrow_right,
     this.iconUpRightColor = Colors.black,
     this.iconDownLeftColor = Colors.black,
-  }) : assert(minValue != null),
-       assert(maxValue != null),
-       assert(initialValue != null),
-       assert(onChanged != null),
-       assert(step != null),
-       assert(loop != null),
-       assert(padding != null),
-       assert(iconUp != null),
-       assert(iconDown != null),
-       assert(iconLeft != null),
-       assert(iconRight != null),
-       assert(iconUpRightColor != null),
-       assert(iconDownLeftColor != null),
-       assert(initialValue >= minValue && initialValue <= maxValue),
-       assert(minValue < maxValue);
+  })  : assert(minValue != null),
+        assert(maxValue != null),
+        assert(initialValue != null),
+        assert(onChanged != null),
+        assert(step != null),
+        assert(loop != null),
+        assert(padding != null),
+        assert(iconUp != null),
+        assert(iconDown != null),
+        assert(iconLeft != null),
+        assert(iconRight != null),
+        assert(iconUpRightColor != null),
+        assert(iconDownLeftColor != null),
+        assert(initialValue >= minValue && initialValue <= maxValue),
+        assert(minValue < maxValue);
 
   final double minValue;
   final double maxValue;
@@ -52,7 +49,9 @@ class ButtonPicker extends StatefulWidget {
   final bool horizontal;
   final bool loop;
   final TextStyle style;
-  final double padding; /// Space between buttons and counter
+  final double padding;
+
+  /// Space between buttons and counter
 
   /// Customizable icons for the buttons
   final IconData iconUp;
@@ -60,8 +59,12 @@ class ButtonPicker extends StatefulWidget {
   final IconData iconLeft;
   final IconData iconRight;
 
-  final Color iconUpRightColor; /// Color of upper button or right button when `horizontal == true`
-  final Color iconDownLeftColor; /// Color of bottom button or left button when `horizontal == true`
+  final Color iconUpRightColor;
+
+  /// Color of upper button or right button when `horizontal == true`
+  final Color iconDownLeftColor;
+
+  /// Color of bottom button or left button when `horizontal == true`
 
   @override
   State<StatefulWidget> createState() => _ButtonPicker();
@@ -79,7 +82,7 @@ class _ButtonPicker extends State<ButtonPicker> {
   }
 
   /// Calculate next value for the ButtonPicker
-  void count (CountDirection countDirection) {
+  void count(CountDirection countDirection) {
     if (countDirection == CountDirection.Up) {
       /// Make sure you can't go over `maxValue` unless `loop == true`
       if (_counter + widget.step > widget.maxValue) {
@@ -114,13 +117,16 @@ class _ButtonPicker extends State<ButtonPicker> {
   /// Remove decimal values if the user entered an integer
   Widget getCount() {
     return Text(
-      widget.initialValue % 1 == 0 && widget.step % 1 == 0 ? _counter.toStringAsFixed(0) : _counter.toStringAsFixed(1),
-      style: widget.style == null ? Theme.of(context).textTheme.headline : widget.style
-    );
+        widget.initialValue % 1 == 0 && widget.step % 1 == 0
+            ? _counter.toStringAsFixed(0)
+            : _counter.toStringAsFixed(1),
+        style: widget.style == null
+            ? Theme.of(context).textTheme.headline
+            : widget.style);
   }
 
   /// Return different widgets for a horizontal and vertical BuildPicker
-  Widget buildButtonPicker () {
+  Widget buildButtonPicker() {
     if (!widget.horizontal) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -138,16 +144,15 @@ class _ButtonPicker extends State<ButtonPicker> {
           ),
           getCount(),
           IconButton(
-            icon: Icon(widget.iconDown),
-            padding: EdgeInsets.only(top: widget.padding),
-            alignment: Alignment.topCenter,
-            color: widget.iconDownLeftColor,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onPressed: () {
-              count(CountDirection.Down);
-            }
-          ),
+              icon: Icon(widget.iconDown),
+              padding: EdgeInsets.only(top: widget.padding),
+              alignment: Alignment.topCenter,
+              color: widget.iconDownLeftColor,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onPressed: () {
+                count(CountDirection.Down);
+              }),
         ],
       );
     } else {
@@ -155,16 +160,15 @@ class _ButtonPicker extends State<ButtonPicker> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           IconButton(
-            icon: Icon(widget.iconLeft),
-            padding: EdgeInsets.only(right: widget.padding),
-            alignment: Alignment.center,
-            color: widget.iconUpRightColor,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onPressed: () {
-              count(CountDirection.Down);
-            }
-          ),
+              icon: Icon(widget.iconLeft),
+              padding: EdgeInsets.only(right: widget.padding),
+              alignment: Alignment.center,
+              color: widget.iconUpRightColor,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onPressed: () {
+                count(CountDirection.Down);
+              }),
           getCount(),
           IconButton(
             icon: Icon(widget.iconRight),
