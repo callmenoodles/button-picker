@@ -25,21 +25,24 @@ class ButtonPicker extends StatefulWidget {
     this.iconRight = Icons.arrow_right,
     this.iconUpRightColor = Colors.black,
     this.iconDownLeftColor = Colors.black,
-  })  : assert(minValue != null),
-        assert(maxValue != null),
-        assert(initialValue != null),
-        assert(onChanged != null),
-        assert(step != null),
-        assert(loop != null),
-        assert(padding != null),
-        assert(iconUp != null),
-        assert(iconDown != null),
-        assert(iconLeft != null),
-        assert(iconRight != null),
-        assert(iconUpRightColor != null),
-        assert(iconDownLeftColor != null),
-        assert(initialValue >= minValue && initialValue <= maxValue),
-        assert(minValue < maxValue);
+    this.disabledOpacity = 0.2,
+    this.isUpRightDisabled = false,
+    this.isDownLeftDisabled = false,
+  }) : assert(minValue != null),
+       assert(maxValue != null),
+       assert(initialValue != null),
+       assert(onChanged != null),
+       assert(step != null),
+       assert(loop != null),
+       assert(padding != null),
+       assert(iconUp != null),
+       assert(iconDown != null),
+       assert(iconLeft != null),
+       assert(iconRight != null),
+       assert(iconUpRightColor != null),
+       assert(iconDownLeftColor != null),
+       assert(initialValue >= minValue && initialValue <= maxValue),
+       assert(minValue < maxValue);
 
   final double minValue;
   final double maxValue;
@@ -49,9 +52,9 @@ class ButtonPicker extends StatefulWidget {
   final bool horizontal;
   final bool loop;
   final TextStyle style;
-  final double padding;
 
   /// Space between buttons and counter
+  final double padding;
 
   /// Customizable icons for the buttons
   final IconData iconUp;
@@ -59,12 +62,15 @@ class ButtonPicker extends StatefulWidget {
   final IconData iconLeft;
   final IconData iconRight;
 
+  /// Color of upper button or right button when `horizontal == true`
   final Color iconUpRightColor;
 
-  /// Color of upper button or right button when `horizontal == true`
+  /// Color of bottom button or left button when `horizontal == true`
   final Color iconDownLeftColor;
 
-  /// Color of bottom button or left button when `horizontal == true`
+  bool isUpRightDisabled;
+  bool isDownLeftDisabled;
+  final double disabledOpacity;
 
   @override
   State<StatefulWidget> createState() => _ButtonPicker();
@@ -130,34 +136,43 @@ class _ButtonPicker extends State<ButtonPicker> {
     if (!widget.horizontal) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          IconButton(
-            icon: Icon(widget.iconUp),
-            padding: EdgeInsets.only(bottom: widget.padding),
-            alignment: Alignment.bottomCenter,
-            color: widget.iconUpRightColor,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onPressed: () {
-              count(CountDirection.Up);
-            },
-          ),
-          getCount(),
-          IconButton(
-              icon: Icon(widget.iconDown),
-              padding: EdgeInsets.only(top: widget.padding),
-              alignment: Alignment.topCenter,
-              color: widget.iconDownLeftColor,
+          Opacity(
+            opacity: widget.isUpRightDisabled ? widget.disabledOpacity : 1,
+            child: IconButton(
+              icon: Icon(widget.iconUp),
+              padding: EdgeInsets.only(bottom: widget.padding),
+              alignment: Alignment.bottomCenter,
+              color: widget.iconUpRightColor,
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onPressed: () {
-                count(CountDirection.Down);
-              }),
+                count(CountDirection.Up);
+
+              },
+            ),
+          ),
+          getCount(),
+          Opacity( // TODO: Ternary
+            opacity: widget.isDownLeftDisabled ? widget.disabledOpacity : 1,
+            child: IconButton(
+                icon: Icon(widget.iconDown),
+                padding: EdgeInsets.only(top: widget.padding),
+                alignment: Alignment.topCenter,
+                color: widget.iconDownLeftColor,
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () {
+                  count(CountDirection.Down);
+                }),
+          ),
         ],
       );
     } else {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           IconButton(
               icon: Icon(widget.iconLeft),
@@ -188,6 +203,20 @@ class _ButtonPicker extends State<ButtonPicker> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.loop == false) {
+      if (_counter + widget.step > widget.maxValue) {
+        setState(() => widget.isUpRightDisabled = true);
+      } else if (_counter - widget.step < widget.minValue) {
+        setState(() => widget.isDownLeftDisabled = true);
+      }
+
+      if (_counter + widget.step <= widget.maxValue) {
+        setState(() => widget.isUpRightDisabled = false);
+      } else if (_counter - widget.step >= widget.minValue) {
+        setState(() => widget.isDownLeftDisabled = false);
+      }
+    }
+
     return buildButtonPicker();
   }
 }
