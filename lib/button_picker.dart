@@ -25,7 +25,7 @@ class ButtonPicker extends StatefulWidget {
     this.iconRight = Icons.arrow_right,
     this.iconUpRightColor = Colors.black,
     this.iconDownLeftColor = Colors.black,
-    this.disabledOpacity = 0.2,
+    this.disabledOpacity = 0.1,
     this.isUpRightDisabled = false,
     this.isDownLeftDisabled = false,
   }) : assert(minValue != null),
@@ -206,13 +206,17 @@ class _ButtonPicker extends State<ButtonPicker> {
     if (widget.loop == false) {
       if (_counter + widget.step > widget.maxValue) {
         setState(() => widget.isUpRightDisabled = true);
-      } else if (_counter - widget.step < widget.minValue) {
+      }
+
+      if (_counter - widget.step < widget.minValue) {
         setState(() => widget.isDownLeftDisabled = true);
       }
 
       if (_counter + widget.step <= widget.maxValue) {
         setState(() => widget.isUpRightDisabled = false);
-      } else if (_counter - widget.step >= widget.minValue) {
+      }
+
+      if (_counter - widget.step >= widget.minValue) {
         setState(() => widget.isDownLeftDisabled = false);
       }
     }
